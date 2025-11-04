@@ -5,28 +5,43 @@ on:
     branches: ["main"]
     paths: ["README.md"]
   schedule:
-    - cron: "0 3 * * *"
+    - cron: "0 3 * * *"  # Se ejecuta todos los días a las 03:00 UTC (04:00 en España)
   workflow_dispatch:
 
 permissions:
-  contents: write   # <-- necesario para poder commitear/pushear
+  contents: write   # Permite al workflow hacer commits y push
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
 
-      - name: Generate metrics
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0              # necesario para pushear
+          persist-credentials: true   # usa el GITHUB_TOKEN del workflow
+
+      - name: Generar tarjeta de Metrics
         uses: lowlighter/metrics@latest
         with:
+          # Usuario de GitHub
           user: pepegoterass
-          token: ${{ secrets.METRICS_TOKEN }}   # PAT classic
+
+          # Token classic con permisos read:user + public_repo
+          token: ${{ secrets.METRICS_TOKEN }}
+
+          # Archivo de salida
           filename: metrics.svg
+
+          # Plantilla y zona horaria
           template: classic
-          config_timezone: America/Mexico_City
+          config_timezone: Europe/Madrid   # ✅ España
+
+          # Secciones base
           base: header, activity, community, repositories, metadata
+
+          # Plugins (puedes ajustar a gusto)
           plugin_languages: yes
           plugin_languages_limit: 8
           plugin_languages_sections: most-used
@@ -35,12 +50,8 @@ jobs:
           plugin_isocalendar: yes
           plugin_isocalendar_duration: full-year
 
-      - name: Commit & push
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # usa el token del workflow con permisos de write
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add metrics.svg
-          git commit -m "chore: update metrics" || exit 0
-          git push
+      - name: Commit & push metrics.svg
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update metrics"
+          file_pattern: metrics.svg
