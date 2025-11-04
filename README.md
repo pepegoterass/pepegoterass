@@ -19,3 +19,5 @@ Here are some ideas to get you started:
 ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=pepegoterass&show_icons=true&theme=tokyonight&rank_icon=github)
 
 ![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=pepegoterass&layout=compact&theme=tokyonight)
+
+![Metrics](https://metrics.lecoq.io/pepegoterass?template=classic&config.timezone=America%2FMexico_City)
