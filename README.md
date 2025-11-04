@@ -20,4 +20,5 @@ Here are some ideas to get you started:
 
 ![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=pepegoterass&layout=compact&theme=tokyonight)
 
-![Metrics](https://metrics.lecoq.io/pepegoterass?template=classic&config.timezone=America%2FMexico_City)
+![Metrics](./metrics.svg)
+
